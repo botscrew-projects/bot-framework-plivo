@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 BotsCrew
+ * Copyright 2019 BotsCrew
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,14 @@ package com.botscrew.botframework.plivo.domain.action;
 
 import com.botscrew.botframework.plivo.model.PlivoUser;
 import com.botscrew.botframework.plivo.model.incoming.PlivoIncomingRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
+@AllArgsConstructor
 public class ProcessedEvent implements PlivoAction {
     private final PlivoIncomingRequest plivoIncomingRequest;
     private final PlivoUser plivoUser;
-
-    public ProcessedEvent(PlivoIncomingRequest plivoIncomingRequest, PlivoUser plivoUser) {
-        this.plivoIncomingRequest = plivoIncomingRequest;
-        this.plivoUser = plivoUser;
-    }
 }
