@@ -29,7 +29,6 @@ import com.botscrew.botframework.plivo.model.PlivoUser;
 import com.botscrew.botframework.plivo.model.incoming.PlivoIncomingRequest;
 import com.botscrew.botframework.plivo.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.task.TaskExecutor;
 
 @Slf4j
 public class DefaultPlivoRequestHandler implements PlivoRequestHandler {
