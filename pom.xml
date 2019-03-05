@@ -22,11 +22,11 @@
 
     <groupId>com.botscrew.botframework</groupId>
     <artifactId>plivo-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.0</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>Module for working with Telegram chat-bot platform</description>
-    <url>http://botscrew.corilla.io/BotsCrew-Docs/</url>
+    <description>Module for making SMS chatbot based on Plivo API and Bot Framework</description>
+    <url>http://botscrew.com/</url>
 
     <licenses>
         <license>
@@ -57,27 +57,27 @@
     </parent>
 
     <build>
-        <!--<pluginManagement>-->
-            <!--<plugins>-->
-                <!--<plugin>-->
-                    <!--<groupId>org.apache.maven.plugins</groupId>-->
-                    <!--<artifactId>maven-gpg-plugin</artifactId>-->
-                    <!--<version>1.5</version>-->
-                    <!--<executions>-->
-                        <!--<execution>-->
-                            <!--<id>sign-artifacts</id>-->
-                            <!--<phase>verify</phase>-->
-                            <!--<goals>-->
-                                <!--<goal>sign</goal>-->
-                            <!--</goals>-->
-                            <!--<configuration>-->
-                                <!--<keyname>${gpg.keyname}</keyname>-->
-                            <!--</configuration>-->
-                        <!--</execution>-->
-                    <!--</executions>-->
-                <!--</plugin>-->
-            <!--</plugins>-->
-        <!--</pluginManagement>-->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.5</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                            <configuration>
+                                <gpg.keyname>${gpg.keyname}</gpg.keyname>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -108,20 +108,20 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-gpg-plugin</artifactId>-->
-                <!--<version>1.6</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>sign-artifacts</id>-->
-                        <!--<phase>verify</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>sign</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -183,7 +183,7 @@
         <dependency>
             <groupId>com.botscrew</groupId>
             <artifactId>bot-framework-core-spring-boot-starter</artifactId>
-            <version>1.0.4</version>
+            <version>1.2.0</version>
             <scope>compile</scope>
         </dependency>
 

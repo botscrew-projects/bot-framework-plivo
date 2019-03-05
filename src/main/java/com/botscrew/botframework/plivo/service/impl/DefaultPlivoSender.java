@@ -23,6 +23,8 @@ import com.botscrew.botframework.plivo.service.PlivoSender;
 import com.botscrew.botframework.plivo.service.PlivoTokenizedSender;
 import lombok.RequiredArgsConstructor;
 
+import java.util.concurrent.ScheduledFuture;
+
 @RequiredArgsConstructor
 public class DefaultPlivoSender implements PlivoSender {
 
@@ -38,5 +40,11 @@ public class DefaultPlivoSender implements PlivoSender {
     public void send(PlivoUser plivoUser, String text) {
         plivoTokenizedSender.send(plivoProperties.getAuthId(), plivoProperties.getAuthToken(),
                 plivoProperties.getPhoneNumber(), plivoUser, text);
+    }
+
+    @Override
+    public ScheduledFuture send(PlivoUser plivoUser, String text, int delay) {
+        return plivoTokenizedSender.send(plivoProperties.getAuthId(), plivoProperties.getAuthToken(),
+                plivoProperties.getPhoneNumber(), plivoUser, text, delay);
     }
 }

@@ -24,7 +24,6 @@ package com.botscrew.botframework.plivo.config.property;
  *  - queue capacity
  *  - keep alive in seconds
  *
- *  @see HandlerTaskExecutorProperties
  *  @see SenderTaskExecutorProperties
  */
 public interface ExecutorProperties {

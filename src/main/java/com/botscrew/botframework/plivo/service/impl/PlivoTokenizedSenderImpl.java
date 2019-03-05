@@ -34,11 +34,15 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
 import static com.botscrew.botframework.plivo.util.PlivoHttpHeadersCreator.createHeaders;
 
@@ -49,21 +53,29 @@ public class PlivoTokenizedSenderImpl implements PlivoTokenizedSender {
     private final PlivoProperties properties;
     private final InterceptorsTrigger interceptorsTrigger;
     private final TaskExecutor taskExecutor;
+    private final ThreadPoolTaskScheduler scheduler;
     private final Map<Long, LockingQueue<PlivoOutgoingRequest>> lockingRequests;
 
     public PlivoTokenizedSenderImpl(RestTemplate restTemplate, PlivoProperties properties,
-                                    InterceptorsTrigger interceptorsTrigger, TaskExecutor taskExecutor) {
+                                    InterceptorsTrigger interceptorsTrigger, TaskExecutor taskExecutor,
+                                    ThreadPoolTaskScheduler scheduler) {
         this.restTemplate = restTemplate;
         this.properties = properties;
         this.interceptorsTrigger = interceptorsTrigger;
         this.lockingRequests = new ConcurrentHashMap<>();
         this.taskExecutor = taskExecutor;
+        this.scheduler = scheduler;
     }
 
     @Override
-    public void send(PlivoBot plivoBot, PlivoMessage plivoMessage) {
-        send(plivoBot.getAuthId(), plivoBot.getAuthToken(), plivoBot.getPhoneNumber(), plivoMessage.getUser(),
-                plivoMessage.getText());
+    public void send(PlivoBot bot, PlivoMessage message) {
+        send(bot.getAuthId(), bot.getAuthToken(), bot.getPhoneNumber(), message.getUser(),
+                message.getText());
+    }
+
+    @Override
+    public ScheduledFuture send(PlivoBot bot, PlivoMessage message, int delay) {
+        return scheduler.schedule(() -> send(bot, message), currentDatePlusMillis(delay));
     }
 
     @Override
@@ -87,6 +99,13 @@ public class PlivoTokenizedSenderImpl implements PlivoTokenizedSender {
         LockingQueue<PlivoOutgoingRequest> queue = lockingRequests.computeIfAbsent(id, k -> new LockingQueue<>());
         queue.push(request);
         if (!queue.isLocked()) startSendRequests(authId, authToken, plivoUser, queue);
+    }
+
+    @Override
+    public ScheduledFuture send(String authId, String authToken, Long botPhoneNumber, PlivoUser plivoUser, String text,
+                                int delay) {
+        return scheduler.schedule(() -> send(authId, authToken, botPhoneNumber, plivoUser, text),
+                currentDatePlusMillis(delay));
     }
 
     private void startSendRequests(String authId, String authToken, PlivoUser plivoUser,
@@ -136,5 +155,16 @@ public class PlivoTokenizedSenderImpl implements PlivoTokenizedSender {
     private void triggerAfterMessageInterceptors(PlivoUser plivoUser, String text, PlivoMessageSentResponse response) {
         AfterSendMessage afterSendMessage = new AfterSendMessage(plivoUser, text, response);
         interceptorsTrigger.trigger(afterSendMessage);
+    }
+
+    private Date currentDatePlusMillis(Integer seconds) {
+        return addToDate(new Date(), Calendar.SECOND, seconds);
+    }
+
+    private Date addToDate(Date date, int calendarField, int amount) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(calendarField, amount);
+        return c.getTime();
     }
 }

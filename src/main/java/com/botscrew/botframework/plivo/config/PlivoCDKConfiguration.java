@@ -18,8 +18,6 @@ package com.botscrew.botframework.plivo.config;
 
 import com.botscrew.botframework.container.TextContainer;
 import com.botscrew.botframework.domain.user.Platform;
-import com.botscrew.botframework.plivo.config.property.ExecutorProperties;
-import com.botscrew.botframework.plivo.config.property.HandlerTaskExecutorProperties;
 import com.botscrew.botframework.plivo.config.property.PlivoProperties;
 import com.botscrew.botframework.plivo.config.property.SenderTaskExecutorProperties;
 import com.botscrew.botframework.plivo.controller.EventController;
@@ -43,6 +41,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -54,7 +53,6 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(value = {
         PlivoProperties.class,
-        HandlerTaskExecutorProperties.class,
         SenderTaskExecutorProperties.class
 })
 @EnableAsync
@@ -101,9 +99,11 @@ public class PlivoCDKConfiguration {
                                                      InterceptorsTrigger interceptorsTrigger,
                                                      PlatformSender platformSender,
                                                      @Qualifier("plivoTokenizedSenderTaskExecutor") TaskExecutor
-                                                                 taskExecutor) {
+                                                                 taskExecutor,
+                                                     @Qualifier("defaultPlivoSenderTaskScheduler") ThreadPoolTaskScheduler
+                                                                 scheduler) {
         PlivoTokenizedSender plivoTokenizedSender = new PlivoTokenizedSenderImpl(restTemplate, properties,
-                interceptorsTrigger, taskExecutor);
+                interceptorsTrigger, taskExecutor, scheduler);
         platformSender.addSender(Platform.APP, plivoTokenizedSender);
         return plivoTokenizedSender;
     }
@@ -168,10 +168,6 @@ public class PlivoCDKConfiguration {
 
     @Bean(name = "plivoTokenizedSenderTaskExecutor")
     public TaskExecutor messageSendingTaskExecutor(SenderTaskExecutorProperties properties) {
-        return createExecutorWithProperties(properties);
-    }
-
-    private TaskExecutor createExecutorWithProperties(ExecutorProperties properties) {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(properties.getCorePoolSize());
         executor.setMaxPoolSize(properties.getMaxPoolSize());
@@ -179,6 +175,14 @@ public class PlivoCDKConfiguration {
         executor.setKeepAliveSeconds(properties.getKeepAliveSeconds());
         executor.initialize();
         return executor;
+    }
+
+    @Bean(name = "defaultPlivoSenderTaskScheduler")
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(5);
+        scheduler.initialize();
+        return scheduler;
     }
 
 }

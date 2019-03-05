@@ -21,8 +21,12 @@ import com.botscrew.botframework.plivo.model.PlivoMessage;
 import com.botscrew.botframework.plivo.model.PlivoUser;
 import com.botscrew.botframework.sender.Sender;
 
+import java.util.concurrent.ScheduledFuture;
+
 public interface PlivoTokenizedSender extends Sender<PlivoBot, PlivoMessage> {
     void send(String authId, String authToken, Long botPhoneNumber, PlivoMessage plivoMessage);
 
     void send(String authId, String authToken, Long botPhoneNumber, PlivoUser plivoUser, String text);
+
+    ScheduledFuture send(String authId, String authToken, Long botPhoneNumber, PlivoUser plivoUser, String text, int delay);
 }

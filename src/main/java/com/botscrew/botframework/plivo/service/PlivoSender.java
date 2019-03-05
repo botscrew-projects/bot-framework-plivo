@@ -19,6 +19,8 @@ package com.botscrew.botframework.plivo.service;
 import com.botscrew.botframework.plivo.model.PlivoMessage;
 import com.botscrew.botframework.plivo.model.PlivoUser;
 
+import java.util.concurrent.ScheduledFuture;
+
 /**
  * Abstraction of PlivoSender for Plivo (supposed that we have one Plivo Bot credentials available in the system)
  */
@@ -26,4 +28,6 @@ public interface PlivoSender {
     void send(PlivoMessage plivoMessage);
 
     void send(PlivoUser plivoUser, String text);
+
+    ScheduledFuture send(PlivoUser plivoUser, String text, int delay);
 }
