@@ -104,7 +104,7 @@ public class PlivoCDKConfiguration {
                                                                  scheduler) {
         PlivoTokenizedSender plivoTokenizedSender = new PlivoTokenizedSenderImpl(restTemplate, properties,
                 interceptorsTrigger, taskExecutor, scheduler);
-        platformSender.addSender(Platform.APP, plivoTokenizedSender);
+        platformSender.addSender(Platform.PLIVO, plivoTokenizedSender);
         return plivoTokenizedSender;
     }
 

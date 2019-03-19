@@ -28,6 +28,6 @@ public interface PlivoBot extends Bot {
 
     @Override
     default Platform getPlatform() {
-        return Platform.APP;
+        return Platform.PLIVO;
     }
 }
