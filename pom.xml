@@ -22,7 +22,7 @@
 
     <groupId>com.botscrew.botframework</groupId>
     <artifactId>plivo-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Module for making SMS chatbot based on Plivo API and Bot Framework</description>
