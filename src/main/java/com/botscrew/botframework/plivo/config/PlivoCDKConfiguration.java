@@ -122,8 +122,8 @@ public class PlivoCDKConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(WebhookRegistrator.class)
     @ConditionalOnProperty({"plivo.bot.auth-id", "plivo.bot.auth-token", "plivo.bot.phone-number"})
+    @ConditionalOnMissingBean(WebhookRegistratorRunner.class)
     public WebhookRegistratorRunner defaultPlivoWebhookRegistratorRunner(WebhookRegistrator webhookRegistrator) {
         return new WebhookRegistratorRunnerImpl(webhookRegistrator);
     }

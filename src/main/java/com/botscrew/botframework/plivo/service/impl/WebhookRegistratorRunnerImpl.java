@@ -24,12 +24,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
-@Service
-@AllArgsConstructor
 public class WebhookRegistratorRunnerImpl implements WebhookRegistratorRunner {
 
-    @Autowired
     private WebhookRegistrator webhookRegistrator;
+
+    public WebhookRegistratorRunnerImpl(WebhookRegistrator webhookRegistrator) {
+        this.webhookRegistrator = webhookRegistrator;
+    }
 
     @PostConstruct
     @Override

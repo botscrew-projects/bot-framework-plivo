@@ -26,7 +26,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlivoOutgoingRequest implements Message {
+public class PlivoOutgoingRequest {
     @JsonProperty("src")
     private Long src;
     @JsonProperty("dst")
