@@ -16,13 +16,14 @@
 
 package com.botscrew.botframework.plivo.model;
 
+import com.botscrew.botframework.domain.user.Bot;
 import com.botscrew.botframework.domain.user.PlatformUser;
 
 public interface PlivoUser extends PlatformUser {
     Long getPhoneNumber();
 
     @Override
-    default PlivoBot getBot(){
+    default Bot getBot(){
         return new DefaultPlivoBot(null, null, null);
     };
 }
